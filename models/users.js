@@ -34,7 +34,7 @@ const find = (findBy, dataQuery = ['email']) => {
         pool.query('SELECT ' + dataQuery.join(', ') + ' FROM users WHERE ' + findDataKeys.join(', '),
             findDataValues,
             (err, res) => {
-                if (!res) reject(err)
+                if (res.rowCount < 1) reject(err)
                 else resolve(res.rows[0]);
             });
     });
@@ -48,7 +48,7 @@ const update = (_id, data) => {
         pool.query('UPDATE users SET ' + setKeys.join(', ') + ' WHERE _id = $1 RETURNING _id, email',
             setValues,
             (err, res) => {
-                if (!res) reject(err)
+                if (res.rowCount < 1) reject(err)
                 else resolve(res.rows[0]);
             });
     });
